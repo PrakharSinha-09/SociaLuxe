@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import User from "../models/User.js"
 
+const JWT_SECRET="HeyThereThisIsPrakhar"
 /* Register User */
 export const register=async (req,res)=>{
     try{
@@ -50,19 +51,19 @@ export const login=async(req,res)=>{
 
         if(!user)
         {
-            res.status(400).json({msg:"User Doesn't Exist!"})
+            return res.status(400).json({msg:"User Doesn't Exist!"})
         }
 
         //Password Matching, will be done if the user with given email exist obviously!
         const isMatch=await bcrypt.compare(password,user.password)       //ofCourse, same salt will be going to be used 
         if(!isMatch)
         {
-            res.status(400).json({msg:"Invalid Credentials!"})
+            return res.status(400).json({msg:"Invalid Credentials!"})
         }
 
-        const token=jwt.sign({ id:user._id }, process.env.JWT_SECRET)
+        const token=jwt.sign({ id:user._id }, JWT_SECRET)
         delete user.password                                              //this is important, so that password doesn't goto frontend
-        res.status(200).json()
+        res.status(200).json({token,user})
 
     }
     catch(err){

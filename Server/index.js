@@ -57,8 +57,8 @@ app.use("/assets",express.static(path.join(__dirname,'public/assets')))
  app.post("/auth/register",upload.single("picture"),register)
  app.post("/posts",verifyToken,upload.single("picture"),createPost)
 
- /*Routes */
  
+ /*Routes */
  app.use("/auth",authRoutes)
  app.use("/users",userRoutes)
  app.use("/posts",postRoutes)
